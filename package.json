@@ -1,0 +1,26 @@
+{
+  "name": "dehab_key_provider",
+  "version": "1.0.0",
+  "description": "Key Provider back end for DEHAB Project",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.4",
+    "routes": "^2.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "server": "npx nodemon app.js w server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daniellucas01/DEHAB_KEY_PROVIDER.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/daniellucas01/DEHAB_KEY_PROVIDER/issues"
+  },
+  "homepage": "https://github.com/daniellucas01/DEHAB_KEY_PROVIDER#readme"
+}
