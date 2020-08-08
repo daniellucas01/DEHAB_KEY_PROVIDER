@@ -13,7 +13,6 @@ User.create =  (newUser, result)  => {
             result(error, null);
             return;
         }
-
         console.log("created user", {id : res.insertId, newUser});
         result(null, {id : res.insertId, newUser});
     });
@@ -32,6 +31,7 @@ User.getAll = result => {
     });
 };
 
+
 User.getById = (userId, result) => {
     mySql.query(`SELECT * FROM user_table WHERE user_id = '${userId}'`, (error, res) => {
         if (error) {
@@ -43,6 +43,27 @@ User.getById = (userId, result) => {
         // If there is user by that ID
         if (res.length) { // Meaning that if there is result of the user with the ID
             console.log("User found!, User: ", res[0]);
+            result (null, res[0]);
+            return;
+        }
+
+        //No user by that id
+        result({kind: "not_found"}, null);
+    });
+};
+
+User.findUserWalletWithUserID = (userId, result) => {
+    mySql.query(`SELECT us.user_id, uw.wallet_address FROM user_table us INNER JOIN user_wallet uw on us.wallet_id = uw.wallet_id WHERE us.user_id = ${userId}`,
+    (error, res) => {
+        if (error) {
+            console.log("error: ", error);
+            result(error, null);
+            return;
+        }
+
+        // If there is user by that ID
+        if (res.length) { // Meaning that if there is result of the user with the ID
+            console.log("Wallet found!, Wallet: ", res[0]);
             result (null, res[0]);
             return;
         }

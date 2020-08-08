@@ -15,6 +15,47 @@ exports.findAll = (req, res) => {
     });
 };
 
+exports.authenticateUser = (req, res) => {
+    User.getByUsername(req.params.username, (err, data) =>{
+        if(err) {
+            // Handle different error
+            // Not found error
+            if (err.kind === "not_found"){
+                res.status(404).send({
+                    message: `A user with the entered username is not found.`
+                });
+            }
+            //Other unhandled errors
+            else {
+                res.status(500).send({
+                    message: `Error retrieving user with id ${req.params.username}.`
+                });
+            }
+        }
+        else {
+            if (data.password == req.params.password) {
+                //Correct Password
+                //Send Wallet Data 
+                User.findUserWalletWithUserID (data.user_id, (err, data) =>{
+                    if (err) {
+                        res.status(500).send({
+                            message: `Error retrieving wallet with id ${data.user_id}.`
+                        });
+                    }
+                    else {
+                        res.send(data);
+                    }
+                });
+            }
+            else {
+                res.status(404).send({
+                    message: `Incorrect Password`
+                });
+            }
+        }
+    });
+};
+
 exports.findById = (req, res) => {
     User.getById(req.params.userId, (err, data) =>{
         if(err) {
@@ -38,6 +79,29 @@ exports.findById = (req, res) => {
     });
 };
 
+exports.getUsersWallet = (req, res) => {
+    User.findUserWalletWithUserID(req.params.userId, (err, data) =>{
+        if(err) {
+            // Handle different error
+            // Not found error
+            if (err.kind === "not_found"){
+                res.status(404).send({
+                    message: `Wallet with id ${req.params.userId} is not found.`
+                });
+            }
+            //Other unhandled errors
+            else {
+                res.status(500).send({
+                    message: `Error retrieving wallet with the entered user ID.`
+                });
+            }
+        }
+        else {
+            res.send(data);
+        }
+    });
+};
+
 exports.createNewUser = (req, res) => {
 
     if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
@@ -45,6 +109,7 @@ exports.createNewUser = (req, res) => {
         res.status(400).send({
             message: "Sent content cannot be EMPTY!"
         });
+        return;
     }
     
     //Check if username exists 
@@ -94,7 +159,7 @@ exports.createNewUser = (req, res) => {
                 }
             }
             else {
-                res.status(501).send({
+                res.status(401).send({
                     message: `A user with the following username already exist, please try again`
                 })
             }
