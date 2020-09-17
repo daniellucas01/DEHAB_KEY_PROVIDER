@@ -36,16 +36,17 @@ exports.authenticateUser = (req, res) => {
             if (data.password == req.params.password) {
                 //Correct Password
                 //Send Wallet Data 
-                User.findUserWalletWithUserID (data.user_id, (err, data) =>{
-                    if (err) {
-                        res.status(500).send({
-                            message: `Error retrieving wallet with id ${data.user_id}.`
-                        });
-                    }
-                    else {
-                        res.send(data);
-                    }
-                });
+                // User.findUserWalletWithUserID (data.user_id, (err, data) =>{
+                //     if (err) {
+                //         res.status(500).send({
+                //             message: `Error retrieving wallet with id ${data.user_id}.`
+                //         });
+                //     }
+                //     else {
+                //         res.send(data);
+                //     }
+                // });
+                res.send(data)
             }
             else {
                 res.status(404).send({
@@ -53,6 +54,28 @@ exports.authenticateUser = (req, res) => {
                 });
             }
         }
+    });
+};
+
+exports.updateWalletAddressWithId = (req, res) => {
+    
+    if(req.body.constructor === Object && Object.keys(req.body).length === 0) {
+        console.log('Update Object missing');
+        res.status(400).send({
+            message: "No data to update with! Please enter a valid data and then try again"
+        });
+        return;
+    }
+
+    User.updateUserWalletWithUserId(req.body.userId, req.body.userWalletAddress,  (err, data) =>{
+        if (err) {
+            res.status(500).send({
+                message: err.message || "An error has occured while updating users from the server."
+            })
+        }
+        else {
+            res.send(data)
+        };
     });
 };
 

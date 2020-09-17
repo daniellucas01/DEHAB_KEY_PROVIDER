@@ -55,6 +55,7 @@ User.getById = (userId, result) => {
 User.findUserWalletWithUserID = (userId, result) => {
     mySql.query(`SELECT us.user_id, uw.wallet_address FROM user_table us INNER JOIN user_wallet uw on us.wallet_id = uw.wallet_id WHERE us.user_id = ${userId}`,
     (error, res) => {
+
         if (error) {
             console.log("error: ", error);
             result(error, null);
@@ -70,6 +71,19 @@ User.findUserWalletWithUserID = (userId, result) => {
 
         //No user by that id
         result({kind: "not_found"}, null);
+    });
+};
+
+User.updateUserWalletWithUserId = (userId, walletAddress, result) => {
+    mySql.query(`UPDATE user_wallet uw INNER JOIN user_table us on us.wallet_id = uw.wallet_id SET wallet_address = '${walletAddress}' WHERE us.user_id = '${userId}'`,
+    (error, res) => {
+
+        if (error) {
+            console.log("error: ", error);
+            result(error, null);
+            return;
+        }
+        result(null, result);
     });
 };
 
@@ -93,5 +107,6 @@ User.getByUsername = (username, result) => {
         result({kind: "not_found"}, null);
     });
 };
+
 
 module.exports = User;

@@ -1,4 +1,6 @@
 pragma solidity ^0.4.0;
+
+
 contract MultiSignatureWallet {
     address private _owner;
     mapping(address => uint8) private _owners;

@@ -9,5 +9,6 @@ router.get('/authenticate/:username/:password', users.authenticateUser);
 router.get('/:userId', users.findById);
 router.get('/wallet/:userId', users.getUsersWallet);
 router.post('/sign', contract.signTranscationInContract);
+router.post('/wallet/update', users.updateWalletAddressWithId);
 
 module.exports = router;

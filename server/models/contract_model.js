@@ -12,7 +12,7 @@ Contract.signTransactionById = async (contractAddress, transactionId, result) =>
     );
 
     const accounts = await web3.eth.getAccounts();
-    console.log('Attempting to deploy from account', accounts[1]);
+    console.log('Attempting to deploy from account', accounts[9]);
 
     const transaction = await instance.methods.signTransaction(transactionId).send({from : accounts[1], gasPrice: 70000000000, gas: 4300000});
     console.log(transaction);
